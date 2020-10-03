@@ -32,11 +32,16 @@ class TaskTwo(SelectPage):
 
     # def initUI(self, parent, controller):
         for idx, i in enumerate(self.words):
-            self.labelFields[i] = tk.Label(self, text = i, font = LABEL_FONT)
+            self.labelFields[i] = tk.Label(self, text = i, font = Vars.LABEL_FONT)
             self.textFields[i] = tk.Entry(self, validate='key', 
                                                     vcmd=(controller.register(self.validate_float), '%P'))
-            self.labelFields[i].place(x = 50, y = 200 + (50 * idx))
-            self.textFields[i].place(x = 50, y = 225 + (50 * idx))
+            if idx % 2 == 0:
+                self.labelFields[i].place(x = 150, y = 50 + (50 * (idx//2)))
+                self.textFields[i].place(x = 300, y = 50 + (50 * (idx//2)))
+            else:
+                self.labelFields[i].place(x = 500, y = 50 + (50 * (idx//2)))
+                self.textFields[i].place(x = 650, y = 50 + (50 * (idx//2)))
+
         
 
 
@@ -44,10 +49,10 @@ class TaskTwo(SelectPage):
         command =  lambda: self._calculate_oip(), 
         padx = 10,
         pady = 10)
-        self.calculate.place(x = 600, y = 550, width = 125, height = 35)
+        self.calculate.place(x = 350, y = 500, width = 125, height = 35)
 
-        self.curr_value = tk.Label(self, textvariable = self.cal_value, font = LABEL_FONT)
-        self.curr_value.place(x = 600, y = 250)
+        self.curr_value = tk.Label(self, textvariable = self.cal_value, font = Vars.LABEL_FONT)
+        self.curr_value.place(x = 500, y = 500)
 
     def validate_float(self, inp, empty = 0):
         try:
