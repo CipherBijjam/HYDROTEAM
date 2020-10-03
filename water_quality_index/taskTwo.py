@@ -13,8 +13,13 @@ class TaskTwo(SelectPage):
         self.do = "DO"
         self.bod = "BOD"
         self.tc = "Total Coliform"
-
-        self.words = [self.pH, self.wind, self.color, self.tdv, self.do, self.bod,self.tc]
+        self.cl = "Chlorine"
+        self.NO3 = "Nitrite"
+        self.SO4 = "Sulphate"
+        self.As = "Arsenic"
+        self.F = "Flouride"
+        self.hardness="Hardness"
+        self.words = [self.pH, self.wind, self.color, self.tdv, self.do, self.bod,self.tc,self.cl,self.NO3,self.SO4,self.As,self.F,self.hardness]
 
         self.textFields = {}
         self.labelFields = {}
@@ -23,23 +28,26 @@ class TaskTwo(SelectPage):
         self.cal_value.set("Not Calculated")
 
         SelectPage.__init__(self, parent, controller)
- 
+        # self.initUI(parent, controller)
+
+    # def initUI(self, parent, controller):
         for idx, i in enumerate(self.words):
             self.labelFields[i] = tk.Label(self, text = i, font = LABEL_FONT)
             self.textFields[i] = tk.Entry(self, validate='key', 
-                                                vcmd=(controller.register(self.validate_float), '%P'))
+                                                    vcmd=(controller.register(self.validate_float), '%P'))
             self.labelFields[i].place(x = 50, y = 200 + (50 * idx))
             self.textFields[i].place(x = 50, y = 225 + (50 * idx))
+        
 
 
         self.calculate = tk.Button(self, text = "Calculate", 
         command =  lambda: self._calculate_oip(), 
         padx = 10,
         pady = 10)
-        self.calculate.place(x = 50, y = 550, width = 125, height = 35)
+        self.calculate.place(x = 600, y = 550, width = 125, height = 35)
 
         self.curr_value = tk.Label(self, textvariable = self.cal_value, font = LABEL_FONT)
-        self.curr_value.place(x = 400, y = 250)
+        self.curr_value.place(x = 600, y = 250)
 
     def validate_float(self, inp, empty = 0):
         try:
@@ -104,7 +112,52 @@ class TaskTwo(SelectPage):
             return(((inp/50)-50)/16.071)
         else:
             return((inp/15000)+16)
+    
+    def cl_norm(self,inp):
+        if inp <= 150:
+            return 1
+        elif inp <=250:
+            return (math.exp(((inp/50)-3)/1.4427))
+        else:
+            return (math.exp((inp/50)+10.167)/10.82)
+    
+    def nit_norm(self,inp):
+        if inp <= 20:
+            return 1
+        elif inp <= 50:
+            return (math.exp(inp-145.16)/76.28)
+        else:
+            return (inp/65)
+    
+    def sulp_norm(self,inp):
+        if inp <= 150:
+            return 1
+        else:
+            return (math.exp((inp/50)+0.375)/2.5121)
+    
+    def as_norm(self,inp):
+        if inp <= 0.005:
+            return 1
+        elif inp <= 0.01:
+            return (inp/0.005)
+        elif inp <= 0.1:
+            return (inp+0.015)/0.0146
+        else:
+            return (inp+1.1)/0.15
+    
+    def f_norm(self,inp):
+        if inp <= 1.2:
+            return 1
+        else:
+            return ((inp/1.2)-0.3819)/0.5083
 
+    def h_norm(self,inp):
+        if inp <= 75:
+            return 1
+        elif inp <= 500:
+            return (math.exp(inp+42.5)/205.58)
+        else:
+            return (inp+500)/125
 
     def _calculate_oip(self):
         validate = True
@@ -125,9 +178,20 @@ class TaskTwo(SelectPage):
                     sum += (self.do_norm(float(self.textFields[i].get())))
                 elif i=="BOD":
                     sum += (self.bod_norm(float(self.textFields[i].get())))
-                else:
+                elif i=="Total Coliform":
                     sum += (self.tc_norm(float(self.textFields[i].get())))
-
-            self.cal_value.set(sum/7)
+                elif i=="Chlorine":
+                    sum += (self.cl_norm(float(self.textFields[i].get())))
+                elif i=="Nitrite":
+                    sum += (self.nit_norm(float(self.textFields[i].get())))
+                elif i=="Sulphate":
+                    sum += (self.sulp_norm(float(self.textFields[i].get())))
+                elif i=="Arsenic":
+                    sum += (self.as_norm(float(self.textFields[i].get())))
+                elif i=="Flouride":
+                    sum += (self.f_norm(float(self.textFields[i].get())))
+                else:
+                    sum += (self.h_norm(float(self.textFields[i].get())))
+            self.cal_value.set(sum/13)
         else:
-            self.cal_value.set("Enter all Inputs")
+            self.cal_value.set("Enter all Inputs") 
