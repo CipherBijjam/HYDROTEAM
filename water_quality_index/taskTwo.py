@@ -4,7 +4,7 @@ import math
 import tkinter.filedialog as tkfd
 import pandas as pd
 from vars import Vars
-from selectpage import SelectPage
+from selectPage import SelectPage
 
 class TaskTwo(SelectPage):
 
