@@ -1,7 +1,10 @@
 import tkinter as tk
-
-from selectPage import SelectPage
+from tkinter import ttk
+import math
+import tkinter.filedialog as tkfd
+import pandas as pd
 from vars import Vars
+from selectpage import SelectPage
 
 class TaskTwo(SelectPage):
 
@@ -49,10 +52,83 @@ class TaskTwo(SelectPage):
         command =  lambda: self._calculate_oip(), 
         padx = 10,
         pady = 10)
-        self.calculate.place(x = 350, y = 500, width = 125, height = 35)
+        self.calculate.place(x = 500, y = 400, width = 125, height = 35)
 
         self.curr_value = tk.Label(self, textvariable = self.cal_value, font = Vars.LABEL_FONT)
         self.curr_value.place(x = 500, y = 500)
+        self.csv_text = tk.StringVar()
+        self.csv_text.set("CSV File Upload")
+        self.csv_label = tk.Label(self, textvariable = self.csv_text, font = Vars.LABEL_FONT)
+        self.csv_label.place(x = 200, y = 450)
+
+        self.fileInput = tk.Entry(self)
+        self.fileInput.place(x = 100, y = 500, w = 200)
+
+        self.chooseFile = tk.Button(self, text = "Input File", 
+        command =  lambda: self.open_file(), 
+        padx = 10,
+        pady = 10)
+        self.chooseFile.place(x = 350, y = 500, width = 125, height = 35)
+
+        self.fileOutput = tk.Entry(self)
+        self.fileOutput.place(x = 100, y = 550, w = 200)
+
+        self.calculate2 = tk.Button(self, text = "Calculate", 
+        command =  lambda: self._calculate_csv_output(), 
+        padx = 10,
+        pady = 10)
+        self.calculate2.place(x = 350, y = 550, width = 125, height = 35)
+
+
+    def _calculate_csv_output(self):
+        inputFilename = self.fileInput.get()
+        outputFilename = self.fileOutput.get()
+        if inputFilename == "" or outputFilename == "":
+            self.csv_text.set("ERROR!! Please Provide both the inputs")
+        else:
+            df = pd.read_csv(inputFilename)
+            values = []
+            for i in range(0, len(df)):
+                sum = 0
+                for word in self.words:
+                    if word=="pH":
+                        sum += (self.ph_norm(float(df[word][i])))
+                    elif word=="Turbidity":
+                        sum += (self.turb_norm(float(df[word][i])))
+                    elif word=="Color":
+                        sum += (self.color_norm(float(df[word][i])))
+                    elif word=="TDS":
+                        sum += (self.tds_norm(float(df[word][i])))
+                    elif word=="DO":
+                        sum += (self.do_norm(float(df[word][i])))
+                    elif word=="BOD":
+                        sum += (self.bod_norm(float(df[word][i])))
+                    elif word=="Total Coliform":
+                        sum += (self.tc_norm(float(df[word][i])))
+                    elif word=="Chlorine":
+                        sum += (self.cl_norm(float(df[word][i])))
+                    elif word=="Nitrite":
+                        sum += (self.nit_norm(float(df[word][i])))
+                    elif word=="Sulphate":
+                        sum += (self.sulp_norm(float(df[word][i])))
+                    elif word=="Arsenic":
+                        sum += (self.as_norm(float(df[word][i])))
+                    elif word=="Flouride":
+                        sum += (self.f_norm(float(df[word][i])))
+                    else:
+                        sum += (self.h_norm(float(df[word][i])))
+                values.append(sum)       
+            df['OIP'] = values
+            df.to_csv(outputFilename, index = False)
+            self.csv_text.set("DONE")
+            self.fileInput.delete(0, tk.END)
+            self.fileOutput.delete(0, tk.END)
+    
+    def open_file(self):
+        filename = tkfd.askopenfilename(filetypes =[('CSV Files', '*.csv')])
+        if filename != () and filename != "":
+            self.fileInput.delete(0, tk.END)
+            self.fileInput.insert(0, filename)
 
     def validate_float(self, inp, empty = 0):
         try:
@@ -200,3 +276,4 @@ class TaskTwo(SelectPage):
             self.cal_value.set(sum/13)
         else:
             self.cal_value.set("Enter all Inputs") 
+
