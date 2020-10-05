@@ -9,20 +9,20 @@ from selectPage import SelectPage
 class TaskTwo(SelectPage):
 
     def __init__(self, parent, controller):
-        self.pH = "pH"
         self.wind = "Turbidity"
+        self.pH = "pH"
         self.color= "Color"
-        self.tdv = "TDS"
         self.do = "DO"
         self.bod = "BOD"
-        self.tc = "Total Coliform"
-        self.cl = "Chlorine"
-        self.NO3 = "Nitrite"
-        self.SO4 = "Sulphate"
-        self.As = "Arsenic"
-        self.F = "Flouride"
+        self.tdv = "TDS"
         self.hardness="Hardness"
-        self.words = [self.pH, self.wind, self.color, self.tdv, self.do, self.bod,self.tc,self.cl,self.NO3,self.SO4,self.As,self.F,self.hardness]
+        self.cl = "Cl"
+        self.NO3 = "No3"
+        self.SO4 = "So4"
+        self.tc = "Coliform"
+        self.As = "As"
+        self.F = "F"
+        self.words = [self.wind,self.pH,self.color, self.do, self.bod, self.tdv,self.hardness,self.cl,self.NO3,self.SO4,self.tc,self.As,self.F]
 
         self.textFields = {}
         self.labelFields = {}
@@ -103,21 +103,21 @@ class TaskTwo(SelectPage):
                         sum += (self.do_norm(float(df[word][i])))
                     elif word=="BOD":
                         sum += (self.bod_norm(float(df[word][i])))
-                    elif word=="Total Coliform":
+                    elif word=="Coliform":
                         sum += (self.tc_norm(float(df[word][i])))
-                    elif word=="Chlorine":
+                    elif word=="Cl":
                         sum += (self.cl_norm(float(df[word][i])))
-                    elif word=="Nitrite":
+                    elif word=="No3":
                         sum += (self.nit_norm(float(df[word][i])))
-                    elif word=="Sulphate":
+                    elif word=="So4":
                         sum += (self.sulp_norm(float(df[word][i])))
-                    elif word=="Arsenic":
+                    elif word=="As":
                         sum += (self.as_norm(float(df[word][i])))
-                    elif word=="Flouride":
+                    elif word=="F":
                         sum += (self.f_norm(float(df[word][i])))
                     else:
                         sum += (self.h_norm(float(df[word][i])))
-                values.append(sum)       
+                values.append(sum/13)       
             df['OIP'] = values
             df.to_csv(outputFilename, index = False)
             self.csv_text.set("DONE")
@@ -142,7 +142,7 @@ class TaskTwo(SelectPage):
         if inp == 7:
             return 1
         elif inp > 7:
-            return (math.exp((inp)/1.082))
+            return (math.exp((inp-7)/1.082))
         else:
             return (math.exp((7-inp)/1.082))
 
@@ -164,7 +164,7 @@ class TaskTwo(SelectPage):
         if inp <= 500:
             return 1
         elif inp <= 1500:
-            return (inp-500)/721
+            return (inp-500)/721.5
         elif inp <= 3000:
             return ((inp-1000)/125)
         else:
@@ -172,7 +172,7 @@ class TaskTwo(SelectPage):
     
     def do_norm(self,inp):
         if inp < 50:
-            return(math.exp(-(inp-98.33)/36.067))
+            return(math.exp((98.33-inp)/36.067))
         elif inp < 100:
             return((inp-107.58)/14.667)
         else:
@@ -185,7 +185,7 @@ class TaskTwo(SelectPage):
             return(inp/1.5)
 
     def tc_norm(self,inp):
-        if inp < 50:
+        if inp <= 50:
             return 1
         elif inp < 5000:
             return(math.pow(inp,0.3010))
@@ -198,7 +198,7 @@ class TaskTwo(SelectPage):
         if inp <= 150:
             return 1
         elif inp <=250:
-            return (math.exp(((inp/50)-3)/1.4427))
+            return (math.exp((inp/50)-3)/1.4427)
         else:
             return (math.exp((inp/50)+10.167)/10.82)
     
@@ -214,7 +214,7 @@ class TaskTwo(SelectPage):
         if inp <= 150:
             return 1
         else:
-            return (math.exp((inp/50)+0.375)/2.5121)
+            return (((inp/50)+0.375)/2.5121)
     
     def as_norm(self,inp):
         if inp <= 0.005:
@@ -259,17 +259,17 @@ class TaskTwo(SelectPage):
                     sum += (self.do_norm(float(self.textFields[i].get())))
                 elif i=="BOD":
                     sum += (self.bod_norm(float(self.textFields[i].get())))
-                elif i=="Total Coliform":
+                elif i=="Coliform":
                     sum += (self.tc_norm(float(self.textFields[i].get())))
-                elif i=="Chlorine":
+                elif i=="Cl":
                     sum += (self.cl_norm(float(self.textFields[i].get())))
-                elif i=="Nitrite":
+                elif i=="No3":
                     sum += (self.nit_norm(float(self.textFields[i].get())))
-                elif i=="Sulphate":
+                elif i=="So4":
                     sum += (self.sulp_norm(float(self.textFields[i].get())))
-                elif i=="Arsenic":
+                elif i=="As":
                     sum += (self.as_norm(float(self.textFields[i].get())))
-                elif i=="Flouride":
+                elif i=="F":
                     sum += (self.f_norm(float(self.textFields[i].get())))
                 else:
                     sum += (self.h_norm(float(self.textFields[i].get())))
