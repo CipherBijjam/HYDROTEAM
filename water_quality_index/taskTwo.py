@@ -6,7 +6,7 @@ import pandas as pd
 from vars import Vars
 from selectPage import SelectPage
 import random
-
+import numpy as np
 class TaskTwo(SelectPage):
 
     def __init__(self, parent, controller):
@@ -90,6 +90,8 @@ class TaskTwo(SelectPage):
             df = pd.read_csv(inputFilename)
             values = []
             classification = []
+            for temp in self.words:
+                df[temp]=df[temp].replace(np.nan,0)
             for i in range(0, len(df)):
                 sum = 0
                 for word in self.words:
