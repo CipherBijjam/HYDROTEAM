@@ -13,8 +13,8 @@ def weighted_decay_wqi(stationwise, station, alpha, num_neigh):
     predicted_wqi = num/denm
     return predicted_wqi
 
-def findWQI(filename):
-    f = open(filename, 'r')
+def findWQI(inputFilename, outputFilename):
+    f = open(inputFilename, 'r')
     rows = csv.DictReader(f)
     stationwise = defaultdict(lambda : [])
     stations = set()
@@ -25,9 +25,9 @@ def findWQI(filename):
     for station in stations:
         val = weighted_decay_wqi(stationwise, station, 2.03, 10)
         ans[station] = val
-    out_f = open("output.csv", "w")
+    out_f = open(outputFilename, "w")
     for station in stations:
         out_f.write(str(station) + "," + str(ans[station]) + "\n")
     out_f.close()
 
-findWQI("input.csv")
+# findWQI("input.csv")
