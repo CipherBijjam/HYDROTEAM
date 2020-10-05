@@ -17,17 +17,17 @@ class SelectPage(tk.Frame):
         from taskOne import TaskOne
         TaskOneButton = self.custom_button(text = "TaskOne", 
         command =  lambda: controller.show_frame(TaskOne))
-        TaskOneButton.place(x = 10, y = 50, width = 125, height = 35)
+        TaskOneButton.place(x = 140, y = 10, width = 125, height = 35)
 
         from taskTwo import TaskTwo
         TaskTwoButton = self.custom_button(text = "TaskTwo", 
         command =  lambda: controller.show_frame(TaskTwo))
-        TaskTwoButton.place(x = 10, y = 90, width = 125, height = 35)
+        TaskTwoButton.place(x = 270, y = 10, width = 125, height = 35)
 
         from taskThree import TaskThree
         TaskThreeButton = self.custom_button(text = "TaskThree", 
         command =  lambda: controller.show_frame(TaskThree))
-        TaskThreeButton.place(x = 10, y = 130, width = 125, height = 35)
+        TaskThreeButton.place(x = 400, y = 10, width = 125, height = 35)
 
     def custom_button(self, text, command):
         return tk.Button(self, text = text, 
