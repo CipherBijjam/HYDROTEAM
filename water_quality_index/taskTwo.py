@@ -7,6 +7,7 @@ from vars import Vars
 from selectPage import SelectPage
 import random
 import numpy as np
+
 class TaskTwo(SelectPage):
 
     def __init__(self, parent, controller):
@@ -46,39 +47,36 @@ class TaskTwo(SelectPage):
                 self.labelFields[i].place(x = 500, y = 50 + (50 * (idx//2)))
                 self.textFields[i].place(x = 650, y = 50 + (50 * (idx//2)))
 
-        
-
-
         self.calculate = tk.Button(self, text = "Calculate", 
         command =  lambda: self._calculate_oip(), 
         padx = 10,
         pady = 10)
-        self.calculate.place(x = 500, y = 400, width = 125, height = 35)
+        self.calculate.place(x = 400, y = 400, width = 125, height = 35)
 
         self.curr_value = tk.Label(self, textvariable = self.cal_value, font = Vars.LABEL_FONT)
-        self.curr_value.place(x = 500, y = 500)
+        self.curr_value.place(x = 550, y = 400)
         self.csv_text = tk.StringVar()
         self.csv_text.set("CSV File Upload")
         self.csv_label = tk.Label(self, textvariable = self.csv_text, font = Vars.LABEL_FONT)
         self.csv_label.place(x = 200, y = 450)
 
         self.fileInput = tk.Entry(self)
-        self.fileInput.place(x = 100, y = 500, w = 200)
+        self.fileInput.place(x = 200, y = 500, w = 200)
 
         self.chooseFile = tk.Button(self, text = "Input File", 
         command =  lambda: self.open_file(), 
         padx = 10,
         pady = 10)
-        self.chooseFile.place(x = 350, y = 500, width = 125, height = 35)
+        self.chooseFile.place(x = 450, y = 500, width = 125, height = 35)
 
         self.fileOutput = tk.Entry(self)
-        self.fileOutput.place(x = 100, y = 550, w = 200)
+        self.fileOutput.place(x = 200, y = 550, w = 200)
 
         self.calculate2 = tk.Button(self, text = "Calculate", 
         command =  lambda: self._calculate_csv_output(), 
         padx = 10,
         pady = 10)
-        self.calculate2.place(x = 350, y = 550, width = 125, height = 35)
+        self.calculate2.place(x = 450, y = 550, width = 125, height = 35)
 
 
     def _calculate_csv_output(self):
