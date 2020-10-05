@@ -89,6 +89,7 @@ class TaskTwo(SelectPage):
         else:
             df = pd.read_csv(inputFilename)
             values = []
+            classification = []
             for i in range(0, len(df)):
                 sum = 0
                 for word in self.words:
@@ -118,7 +119,18 @@ class TaskTwo(SelectPage):
                         sum += (self.f_norm(float(df[word][i])))
                     else:
                         sum += (self.h_norm(float(df[word][i])))
-                values.append((sum/13)%17+random.uniform(0,1))       
+                values.append((sum/13)%17+random.uniform(0,1)) 
+            for j in range(0,len(values)):
+                if(values[j]>=0 and values[j]<1):
+                    classification.append("C1")
+                elif(values[j]>=1 and values[j]<2):
+                    classification.append("C2")
+                elif(values[j]>=2 and values[j]<4):
+                    classification.append("C3")
+                elif(values[j]>=4 and values[j]<8):
+                    classification.append("C4")
+                elif(values[j]>=8 and values[j]<17):
+                    classification.append("C5")
             df['OIP'] = values
             df.to_csv(outputFilename, index = False)
             self.csv_text.set("DONE")
