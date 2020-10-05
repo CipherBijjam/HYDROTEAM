@@ -5,6 +5,7 @@ import tkinter.filedialog as tkfd
 import pandas as pd
 from vars import Vars
 from selectPage import SelectPage
+import random
 
 class TaskTwo(SelectPage):
 
@@ -117,7 +118,7 @@ class TaskTwo(SelectPage):
                         sum += (self.f_norm(float(df[word][i])))
                     else:
                         sum += (self.h_norm(float(df[word][i])))
-                values.append(sum/13)       
+                values.append((sum/13)%17+random.uniform(0,1))       
             df['OIP'] = values
             df.to_csv(outputFilename, index = False)
             self.csv_text.set("DONE")
@@ -273,7 +274,7 @@ class TaskTwo(SelectPage):
                     sum += (self.f_norm(float(self.textFields[i].get())))
                 else:
                     sum += (self.h_norm(float(self.textFields[i].get())))
-            self.cal_value.set(sum/13)
+            self.cal_value.set((sum/13)%17+random.uniform(0,1))
         else:
             self.cal_value.set("Enter all Inputs") 
 
