@@ -1,3 +1,4 @@
 .vscode
 water_quality_index/.vscode
+water_quality_index/*.csv
 water_quality_index/__pycache__
