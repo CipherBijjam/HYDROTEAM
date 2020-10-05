@@ -3,29 +3,25 @@ import numpy as np
 import cartopy
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
-def get_locations():
+def get_viz():
     dfs = pd.read_csv('metadata.csv')
     s_no = dfs['GEMS Station Number']
     latitudes = dfs['Latitude']
     longitudes = dfs['Longitude']
-    latitude_map, longitude_map = {}, {}
-    for i in range(len(s_no)):
-        latitude_map[s_no[i]] = latitudes[i]
-        longitude_map[s_no[i]] = longitudes[i]
-    return latitude_map, longitude_map
-
-
-def get_river_stretch_plot(stations, wqi_vals):
-    lat_map, long_map = get_locations()
-    fig = plt.figure(figsize=(14, 14))
-    ax = plt.axes(projection=ccrs.PlateCarree())
-    for i in range(len(stations)):
-        ax.scatter(long_map[stations[i]], lat_map[stations[i]], s = wqi_vals[i]*10, transform=ccrs.PlateCarree())
-    ax.coastlines()
+    dfs2 = pd.read_csv('input.csv')
+    fig, ax = plt.subplots()
+    ind_img = mpimg.imread('india-rivers-map.jpg')
+    plt.imshow(ind_img,extent=[68.7, 96.25, 7.4, 37.6], alpha=0.75)
+    labels = ["C1", "C2", "C3", "C4", "C3", "C2", "C1", "C2", "C3", "C4", "C3", "C2", "C1", "C2", "C3", "C4", "C3", "C2",
+             "C1", "C2", "C3", "C4", "C3", "C2", "C1", "C2", "C3", "C4", "C3", "C2", "C1", "C2", "C3", "C4", "C3", "C2",
+             "C1", "C2", "C3", "C4", "C3", "C2", "C1", "C2", "C3", "C4", "C3", "C2", "C1", "C2", "C3", "C4", "C3", "C2",
+             "C1", "C2", "C3", "C4", "C3", "C2", "C1", "C2", "C3", "C4", "C3", "C2", "C1", "C2", "C3", "C4", "C3", "C2"]
+    scatter = ax.scatter(longitudes, latitudes, c=labels)
+    legend1 = ax.legend(*scatter.legend_elements(),
+                loc="lower left", title="Classes")
+    ax.add_artist(legend1)
     plt.show()
 
-dfs = pd.read_csv('metadata.csv')
-s_no = dfs['GEMS Station Number']
-wqi = np.random.uniform(low = 10, high = 70, size = (len(s_no),))
-get_river_stretch_plot(s_no, wqi)
+get_viz()
