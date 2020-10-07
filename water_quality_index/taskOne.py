@@ -90,9 +90,11 @@ class TaskOne(SelectPage):
             df = pd.read_csv(inputFilename)
             values = []
             for i in range(0, len(df)):
-                sum = 0
+                sum, deno = 0, 0
                 for word in self.words:
                     sum += (df[word][i] * self.weights[word])
+                    deno += self.weights[word]
+                sum = sum /deno
                 values.append(sum)       
             df['WQI'] = values
             df.to_csv(outputFilename, index = False)
