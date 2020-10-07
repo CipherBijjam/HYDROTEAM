@@ -33,7 +33,6 @@ def get_viz():
     plt.imshow(ind_img,extent=[68.7, 96.25, 7.4, 37.6], alpha=0.75)
     labels = []
     colors = ['red', 'yellow', 'blue', 'purple', 'green']
-    ct = [0,0,0,0,0]
     for val in wqi_array:
         if val >=0 and val <25:
             labels.append(0)
@@ -45,8 +44,6 @@ def get_viz():
             labels.append(3)
         else:
             labels.append(4)
-    # print(ct)
-
     scatter = ax.scatter(longitudes, latitudes, c=labels, cmap=matplotlib.colors.ListedColormap(colors))
     legend1 = ax.legend(*scatter.legend_elements(), loc="lower left")
     ax.add_artist(legend1)
